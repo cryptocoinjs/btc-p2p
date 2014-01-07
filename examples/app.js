@@ -26,3 +26,15 @@ n.on('peerMessage', function peerMessage(d) {
 });
 
 n.launch();
+
+/*
+// Single launch
+dns.resolve4('dnsseed.bluematt.me', function(err, addrs) {
+  if (err) {
+    console.log(err);
+    return;
+  }
+  n.launch(addrs.shift());
+  //n.manager.addPool(addrs);
+});
+*/
