@@ -33,6 +33,13 @@ n.on('versionMessage', function versionMessage(d) {
 
 n.on('transactionInv', function transactionInv(d) {
   console.log('Peer '+d.peer.getUUID()+' knows of Transaction '+d.hash.toString('hex'));
+  n.getData({type:1, hash:d.hash}, d.peer, function(err, rs) {
+    if (err !== false) {
+      console.log('Data returned error: '+err);
+      return;
+    }
+    console.log('Data returned:', rs);
+  });
 });
 n.on('transactionBlock', function transactionInv(d) {
   console.log('Peer '+d.peer.getUUID()+' knows of Block '+d.hash.toString('hex'));
