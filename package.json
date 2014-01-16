@@ -1,6 +1,6 @@
 {
   "name": "btc-p2p",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Manage a network of Bitcoin peers",
   "keywords": [
     "p2p",
