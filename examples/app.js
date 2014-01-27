@@ -17,7 +17,7 @@ n.on('error', function error(d) {
   console.log('('+d.severity+'): '+d.message);
 });
 
-n.on('peerStatus', function status(d) {
+n.on('status', function status(d) {
   console.log('PeerManager status:', d);
 });
 
