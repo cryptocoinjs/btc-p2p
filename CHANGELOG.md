@@ -1,3 +1,7 @@
+Next Release
+------------
+* Update the `Struct` object error-handling to not use events, but rather internal failed state flag.
+
 0.2.0 / 2014-01-16
 ------------------
 * Add parsing of more message types: `alert`, `getblocks`, `getheaders`, `headers`, `notfound`, and `tx`
