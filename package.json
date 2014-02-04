@@ -12,6 +12,7 @@
   "main": "./lib/BTCNetwork.js",
   "dependencies": {
     "p2p-manager": "0.1.x",
+    "crypto-binary": "0.1.x",
     "crypto-hashing": "0.1.x"
   },
   "devDependencies": {
