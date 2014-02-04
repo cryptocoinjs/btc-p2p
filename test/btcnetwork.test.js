@@ -43,6 +43,54 @@ describe('BTCNetwork', function() {
   it('should properly reject a badly-formatted ALERT message', function() {
     assert.equal(n.parseAlertMessage(new Buffer('0102030405', 'hex')), false);
   });
+  it('should properly parse a BLOCK message', function() {
+    var genesis = '01000000'+ // version
+      '0000000000000000000000000000000000000000000000000000000000000000'+ // previous block
+      '3ba3edfd7a7b12b27ac72c3e67768f617fc81bc3888a51323a9fb8aa4b1e5e4a'+ // merkle root
+      '29ab5f49'+ // timestamp
+      'ffff001d'+ // difficulty
+      '1dac2b7c'+ // nonce
+      '01'+ // number of transactions
+      '01000000'+ // version
+      '01'+ // number of ins
+      '0000000000000000000000000000000000000000000000000000000000000000'+ // previous transaction hash
+      'ffffffff'+ // previous transaction index
+      '4d'+ // script size
+      '04ffff001d010445'+
+      '5468652054696d65732030332f4a616e2f32303039204368616e63656c6c6f72206f6e206272696e6b206f66207365636f6e64206261696c6f757420666f722062616e6b73'+ // 'The Times 03/Jan/2009 Chancellor on brink of second bailout for banks'
+      'ffffffff'+ // sequence
+      '01'+ // number of outs
+      '00f2052a01000000'+ // value (50 BTC)
+      '43'+ // script size
+      '4104678afdb0fe5548271967f1a67130b7105cd6a828e03909a67962e0ea1f61deb649f6bc3f4cef38c4f35504e51ec112de5c384df7ba0b8d578a4c702b6bf11d5fac'+
+      '00000000'; // lock
+    var test = n.parseBlockMessage(new Buffer(genesis, 'hex'));
+    assert.equal(test.version, 1);
+    assert.ok(Buffer.isBuffer(test.prev_block));
+    assert.equal(test.prev_block.toString('hex'), '0000000000000000000000000000000000000000000000000000000000000000');
+    assert.ok(Buffer.isBuffer(test.merkle_root));
+    assert.equal(test.merkle_root.toString('hex'), '3ba3edfd7a7b12b27ac72c3e67768f617fc81bc3888a51323a9fb8aa4b1e5e4a');
+    assert.equal(test.timestamp.getTime(), 1231006505000);
+    assert.equal(test.difficulty, 486604799);
+    assert.equal(test.nonce, 2083236893);
+    assert.ok(Array.isArray(test.txns));
+    assert.equal(test.txns.length, 1);
+    assert.ok(Array.isArray(test.txns[0].txIn));
+    assert.equal(test.txns[0].txIn.length, 1);
+    assert.ok(Buffer.isBuffer(test.txns[0].txIn[0].outPoint.hash));
+    assert.equal(test.txns[0].txIn[0].outPoint.hash.toString('hex'), '0000000000000000000000000000000000000000000000000000000000000000');
+    assert.equal(test.txns[0].txIn[0].outPoint.index, 0xFFFFFFFF);
+    assert.ok(Buffer.isBuffer(test.txns[0].txIn[0].signature));
+    assert.equal(test.txns[0].txIn[0].signature.toString('hex'), '04ffff001d0104455468652054696d65732030332f4a616e2f32303039204368616e63656c6c6f72206f6e206272696e6b206f66207365636f6e64206261696c6f757420666f722062616e6b73');
+    assert.equal(test.txns[0].txIn[0].sequence, 0xFFFFFFFF);
+    assert.ok(Array.isArray(test.txns[0].txOut));
+    assert.equal(test.txns[0].txOut.length, 1);
+    assert.ok(Buffer.isBuffer(test.txns[0].txOut[0].value));
+    assert.equal(test.txns[0].txOut[0].value.toString('hex'), '00f2052a01000000');
+    assert.ok(Buffer.isBuffer(test.txns[0].txOut[0].script));
+    assert.equal(test.txns[0].txOut[0].script.toString('hex'), '4104678afdb0fe5548271967f1a67130b7105cd6a828e03909a67962e0ea1f61deb649f6bc3f4cef38c4f35504e51ec112de5c384df7ba0b8d578a4c702b6bf11d5fac');
+    assert.equal(test.txns[0].lock, 0);
+  });
   it('should properly reject a badly-formatted GETBLOCKS message', function() {
     assert.equal(n.parseGetblocksMessage(new Buffer('0102030405', 'hex')), false);
   });
